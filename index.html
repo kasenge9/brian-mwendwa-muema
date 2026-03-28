@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kinatwa 14-Seater Booking System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>Kinatwa 14-Seater Booking System</h1>
+    <p>Reserve seats quickly for your next trip.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Create Booking</h2>
+      <form id="booking-form">
+        <label>
+          Full Name
+          <input type="text" id="fullName" required />
+        </label>
+
+        <label>
+          Phone Number
+          <input type="tel" id="phone" required pattern="[0-9+\-\s]{7,}" />
+        </label>
+
+        <label>
+          Travel Date
+          <input type="date" id="travelDate" required />
+        </label>
+
+        <label>
+          Departure Time
+          <input type="time" id="departureTime" required />
+        </label>
+
+        <fieldset>
+          <legend>Select Seat(s) (14 total)</legend>
+          <div id="seat-grid" class="seat-grid"></div>
+        </fieldset>
+
+        <button type="submit">Book Selected Seat(s)</button>
+      </form>
+      <p id="form-message" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card">
+      <h2>Current Bookings</h2>
+      <ul id="booking-list" class="booking-list"></ul>
+      <button id="clear-bookings" class="danger" type="button">Clear All Bookings</button>
+    </section>
+  </main>
+
+  <footer>
+    <small>Capacity: 14 passengers · Kinatwa Shuttle</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
