@@ -1,57 +1,39 @@
-# Kinatawa 16-Seater Minibus Booking Website
+# KINATWA SACCO Backend Management System
 
-A Tahmeed-inspired demo booking website for a **16-seater Kinatawa minibus** built with vanilla HTML, CSS, and JavaScript.
+A Flask + SQLite backend-oriented transport management system for a 16-seater minibus SACCO.
 
-## Advanced features included
+## Features
 
-- Trip search by route, date, and passenger count (1–4 passengers).
-- Interactive **16-seat aisle layout** with four real-time states:
-  - Available
-  - Selected
-  - Booked
-  - Temporarily held (5 minutes)
-- Multi-seat booking in one checkout transaction.
-- Dynamic fare engine:
-  - Weekend surcharge (+15%)
-  - Peak-hour surcharge (+10%)
-- Checkout flow with simulated M-Pesa STK push confirmation.
-- Ticket generation with:
-  - Booking ID
-  - Seat list
-  - Driver contact
-  - Print and text-download options
-- Live trip tracker (demo progress bar status).
-- Driver WhatsApp quick-contact button from trip cards.
-- Admin dashboard with KPIs:
-  - Total trips
-  - Bookings
-  - Seats sold
-  - Revenue
-- Admin trip management:
-  - Add trip
-  - Cancel/reopen trip
-  - Occupancy visibility
-
-> Note: This is a front-end MVP+ demo. Payments, WhatsApp, and tracking are simulated/browser-based.
-
-## Project files
-
-- `index.html` — App structure (search, seat map, checkout, ticket, tracker, admin).
-- `styles.css` — Responsive UI, seat map visuals, progress tracker, admin KPIs.
-- `script.js` — Business logic for searching, seat holds, pricing, checkout, ticketing, tracking, and admin actions.
+- Sidebar admin layout with module navigation and active-page highlighting.
+- Flask-rendered pages (Jinja2) for:
+  - Dashboard
+  - Trips / Routes
+  - Vehicles
+  - Drivers
+  - Schedules
+  - Bookings (with 16-seat selection)
+  - Parcels
+  - Customers
+  - Payments
+  - Reports
+  - Settings
+- SQLite persistence.
+- Flash messages for success/failure actions.
+- Booking form with seat conflict prevention (`UNIQUE(trip_id, seat_number)`).
 
 ## Run locally
 
-1. Clone the repository.
-2. Open `index.html` in a modern browser.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install flask
+python app.py
+```
 
-No build step is required.
+Open: `http://127.0.0.1:5000`
 
-## Recommended next production steps
+## Notes
 
-- Move data from localStorage to backend APIs.
-- Add proper authentication and admin authorization.
-- Use PostgreSQL/MySQL for trips/seats/bookings/payments.
-- Integrate real M-Pesa Daraja callbacks.
-- Implement server-side transactional seat locking.
-- Add PDF ticketing and SMS/WhatsApp notification services.
+- Database file is created automatically as `kinatwa.db`.
+- Initial seed trips are inserted on first run.
+- This is a backend/admin foundation and can be extended with full CRUD, auth, Daraja API integration, and PDF exports.

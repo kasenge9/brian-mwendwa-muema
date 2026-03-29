@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Drivers</h2>
+<form method="post" class="panel form-grid">
+  <input name="full_name" placeholder="Full name" required>
+  <input name="phone" placeholder="Phone" required>
+  <input name="license_no" placeholder="License number" required>
+  <button type="submit">Add Driver</button>
+</form>
+<table class="panel table"><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>License</th><th>Status</th></tr></thead><tbody>{% for d in drivers %}<tr><td>{{ d.id }}</td><td>{{ d.full_name }}</td><td>{{ d.phone }}</td><td>{{ d.license_no }}</td><td>{{ d.status }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}

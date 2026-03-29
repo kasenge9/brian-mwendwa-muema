@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Parcels</h2>
+<p class="panel">Parcel tracking module scaffold.</p>
+<table class="panel table"><thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Route</th><th>Description</th><th>Status</th></tr></thead><tbody>{% for p in parcels %}<tr><td>{{ p.id }}</td><td>{{ p.customer_name }}</td><td>{{ p.phone }}</td><td>{{ p.route_from }}→{{ p.route_to }} ({{ p.travel_date }})</td><td>{{ p.description }}</td><td>{{ p.status }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}

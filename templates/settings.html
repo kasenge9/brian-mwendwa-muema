@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Settings</h2>
+<form method="post" class="panel form-grid">
+  <input name="sacco_name" value="{{ settings.sacco_name }}" required>
+  <input name="contact_phone" value="{{ settings.contact_phone }}" required>
+  <input name="logo_url" value="{{ settings.logo_url or '' }}" placeholder="Logo URL">
+  <input name="fare_rules" value="{{ settings.fare_rules }}" required>
+  <label class="check"><input type="checkbox" name="mpesa_enabled" {% if settings.mpesa_enabled %}checked{% endif %}> Enable M-Pesa</label>
+  <button type="submit">Save Settings</button>
+</form>
+{% endblock %}

@@ -1,0 +1,24 @@
+:root { --bg:#f4f7fb; --card:#fff; --ink:#1f2937; --muted:#6b7280; --accent:#0f4c81; --accent2:#2f80ed; }
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{background:#0b1f33;color:#e5efff;padding:1rem;display:flex;flex-direction:column;gap:1rem}
+.sidebar h1{font-size:1.1rem;margin:0 0 .5rem}
+.sidebar nav{display:flex;flex-direction:column;gap:.35rem}
+.sidebar a{color:#bfd4f1;text-decoration:none;padding:.55rem .65rem;border-radius:.45rem}
+.sidebar a.active,.sidebar a:hover{background:#143455;color:#fff}
+.counts{margin-top:auto;font-size:.85rem;color:#aac3e8}
+.content{padding:1.2rem 1.4rem}
+.panel,.card{background:var(--card);border-radius:.6rem;padding:1rem;box-shadow:0 2px 8px rgba(15,35,60,.08);margin-bottom:1rem}
+.cards{display:grid;gap:1rem}.cards.four{grid-template-columns:repeat(4,minmax(0,1fr))}.cards.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card h3{margin:.1rem 0 .4rem;color:var(--muted)} .card p{font-size:1.4rem;font-weight:700;margin:.2rem 0}
+.form-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.6rem}
+.form-grid input,.form-grid select,.form-grid button{padding:.55rem;border:1px solid #d9e0ea;border-radius:.45rem}
+.form-grid button{background:var(--accent2);color:white;border:none;cursor:pointer}
+.table{width:100%;border-collapse:collapse} table.table th,table.table td{padding:.55rem;border-bottom:1px solid #e5eaf2;text-align:left;font-size:.92rem}
+.quick-links{display:flex;gap:.6rem;margin:1rem 0}.quick-links a{background:var(--accent);color:#fff;padding:.55rem .8rem;border-radius:.4rem;text-decoration:none}
+.flash{padding:.65rem .8rem;border-radius:.4rem;margin-bottom:.5rem}.flash.success{background:#e7f8ef;color:#11643a}.flash.error{background:#feecec;color:#a32020}
+.seats{display:grid;grid-template-columns:repeat(5,56px);gap:.5rem;align-items:center}
+.seat{display:flex;align-items:center;justify-content:center;border-radius:.4rem;padding:.4rem;background:#e6f7ee;border:1px solid #7ed7a3;cursor:pointer}
+.seat input{display:none}.seat.booked{background:#ffe2e2;border-color:#f59a9a;opacity:.7;cursor:not-allowed}.aisle{display:block;width:20px}
+.check{display:flex;align-items:center;gap:.4rem}
+@media (max-width:1100px){.cards.four{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:5}}

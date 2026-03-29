@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Vehicles</h2>
+<form method="post" class="panel form-grid">
+  <input name="plate_number" placeholder="Plate number" required>
+  <input name="model" placeholder="Model" required>
+  <input type="number" name="capacity" min="1" value="16" required>
+  <button type="submit">Add Vehicle</button>
+</form>
+<table class="panel table"><thead><tr><th>ID</th><th>Plate</th><th>Model</th><th>Capacity</th><th>Status</th></tr></thead><tbody>{% for v in vehicles %}<tr><td>{{ v.id }}</td><td>{{ v.plate_number }}</td><td>{{ v.model }}</td><td>{{ v.capacity }}</td><td>{{ v.status }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}
