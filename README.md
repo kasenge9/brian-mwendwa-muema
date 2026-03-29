@@ -1,27 +1,45 @@
 # KINATWA SACCO Backend Management System
 
-A Flask + SQLite backend-oriented transport management system for a 16-seater minibus SACCO.
+Flask + SQLite administrative system for managing a 16-seater SACCO transport operation.
 
-## Features
+## Overview
 
-- Sidebar admin layout with module navigation and active-page highlighting.
-- Flask-rendered pages (Jinja2) for:
-  - Dashboard
-  - Trips / Routes
-  - Vehicles
-  - Drivers
-  - Schedules
-  - Bookings (with 16-seat selection)
-  - Parcels
-  - Customers
-  - Payments
-  - Reports
-  - Settings
-- SQLite persistence with basic relational integrity.
-- Flash messages for success/failure actions.
-- Booking form with seat conflict prevention (`UNIQUE(trip_id, seat_number)`).
+This project is a backend-oriented admin panel (not a public booking site) with:
 
-## Run locally
+- Sidebar navigation across all management modules.
+- Flask routes + Jinja2 templates for each module page.
+- SQLite persistence for trips, customers, bookings, payments, and settings.
+- Booking seat controls for a 16-seat minibus layout.
+
+## Modules
+
+- Dashboard
+- Trips / Routes
+- Vehicles
+- Drivers
+- Schedules
+- Bookings
+- Parcels
+- Customers
+- Payments
+- Reports
+- Settings
+
+## Booking Rules Implemented
+
+- Seats are limited to **1–16**.
+- A seat cannot be double-booked on the same trip (`UNIQUE(trip_id, seat_number)`).
+- Bookings are accepted only for trips with status `open`.
+- Payment status is validated (`pending` or `paid`) before saving.
+
+## Tech Stack
+
+- **Backend:** Python + Flask
+- **Database:** SQLite (`kinatwa.db`)
+- **Templating:** Jinja2
+- **Styling:** Plain CSS (`static/styles.css`)
+
+## Local Setup
 
 ```bash
 python -m venv .venv
@@ -30,30 +48,19 @@ pip install flask
 python app.py
 ```
 
-Open: `http://127.0.0.1:5000`
+Open in browser: `http://127.0.0.1:5000`
 
-## Merge conflict quick-fix (`README.md`)
+## Project Structure
 
-If GitHub reports **"This branch has conflicts that must be resolved"** for `README.md`, use:
-
-```bash
-git fetch origin
-git checkout work
-git merge origin/main
-# edit README.md and resolve <<<<<<< ======= >>>>>>> markers
-git add README.md
-git commit -m "Resolve README merge conflict"
-git push origin work
-```
-
-If you are **not planning to merge**, abort safely:
-
-```bash
-git merge --abort
+```text
+app.py
+templates/
+static/
+README.md
 ```
 
 ## Notes
 
-- Database file is created automatically as `kinatwa.db`.
-- Initial seed trips are inserted on first run.
-- This is a backend/admin foundation and can be extended with full CRUD, auth, Daraja API integration, and PDF exports.
+- The database schema is initialized automatically on app startup.
+- Seed trips are added on first run when the trips table is empty.
+- `SECRET_KEY` is currently development-only and should be replaced for production deployments.
