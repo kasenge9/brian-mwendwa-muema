@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kinatawa 16-Seater Booking System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <p class="eyebrow">Tahmeed-style experience</p>
+      <h1>Kinatawa 16-Seater Minibus Booking</h1>
+      <p>Search trips, select seats in real time, complete a simulated M-Pesa checkout, and receive an instant e-ticket.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel" id="search-panel">
+      <h2>1) Search Trips</h2>
+      <form id="search-form" class="form-grid">
+        <label>
+          From
+          <select id="route-from" required>
+            <option value="">Choose departure</option>
+            <option>Mombasa</option>
+            <option>Nairobi</option>
+            <option>Voi</option>
+            <option>Mariakani</option>
+          </select>
+        </label>
+
+        <label>
+          To
+          <select id="route-to" required>
+            <option value="">Choose destination</option>
+            <option>Nairobi</option>
+            <option>Mombasa</option>
+            <option>Voi</option>
+            <option>Mariakani</option>
+          </select>
+        </label>
+
+        <label>
+          Travel Date
+          <input type="date" id="travel-date" required />
+        </label>
+
+        <label>
+          Passengers
+          <input type="number" id="passenger-count" min="1" max="4" value="1" required />
+        </label>
+
+        <button type="submit">Search Available Trips</button>
+      </form>
+
+      <p class="message" id="search-message" aria-live="polite"></p>
+      <div id="trip-results" class="trip-results"></div>
+    </section>
+
+    <section class="panel" id="seat-panel">
+      <h2>2) Seat Selection (16 seats)</h2>
+      <p class="muted" id="selected-trip-text">Choose a trip to unlock seat selection.</p>
+
+      <div class="seat-legend">
+        <span><i class="swatch swatch--open"></i> Available</span>
+        <span><i class="swatch swatch--selected"></i> Selected</span>
+        <span><i class="swatch swatch--booked"></i> Booked</span>
+        <span><i class="swatch swatch--held"></i> Temporarily Held</span>
+      </div>
+
+      <div id="seat-map" class="seat-map" aria-label="Seat map"></div>
+      <p class="message" id="seat-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" id="checkout-panel">
+      <h2>3) Checkout & Payment</h2>
+      <form id="checkout-form" class="form-grid">
+        <label>
+          Passenger Full Name
+          <input type="text" id="passenger-name" required />
+        </label>
+
+        <label>
+          Phone Number (M-Pesa)
+          <input type="tel" id="passenger-phone" required pattern="[0-9+\-\s]{7,}" />
+        </label>
+
+        <label>
+          National ID / Passport
+          <input type="text" id="passenger-id" required />
+        </label>
+
+        <label>
+          Email (optional)
+          <input type="email" id="passenger-email" placeholder="name@example.com" />
+        </label>
+
+        <button type="submit" id="pay-button">Send STK Push & Confirm</button>
+      </form>
+
+      <div class="checkout-summary" id="checkout-summary"></div>
+      <p class="message" id="checkout-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" id="ticket-panel">
+      <h2>4) Ticket Confirmation</h2>
+      <div id="ticket-card" class="ticket empty">
+        <p>No confirmed ticket yet. Complete checkout to generate your ticket.</p>
+      </div>
+      <div class="ticket-actions">
+        <button type="button" id="print-ticket" class="secondary" disabled>Print Ticket</button>
+        <button type="button" id="download-ticket" class="secondary" disabled>Download Ticket (.txt)</button>
+      </div>
+    </section>
+
+    <section class="panel" id="tracker-panel">
+      <h2>Live Trip Tracker (Demo)</h2>
+      <p class="muted" id="tracker-label">Select a trip to view progress status.</p>
+      <div class="progress-track">
+        <div id="tracker-progress" class="progress-fill"></div>
+      </div>
+      <p class="message" id="tracker-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" id="bookings-panel">
+      <h2>Recent Bookings</h2>
+      <ul id="booking-list" class="booking-list"></ul>
+      <button type="button" id="clear-bookings" class="danger">Clear All Bookings</button>
+    </section>
+
+    <section class="panel" id="admin-panel">
+      <h2>Admin Dashboard (MVP+)</h2>
+      <div class="admin-kpis" id="admin-kpis"></div>
+      <form id="admin-trip-form" class="form-grid">
+        <label>
+          Route From
+          <input type="text" id="admin-from" placeholder="Mombasa" required />
+        </label>
+        <label>
+          Route To
+          <input type="text" id="admin-to" placeholder="Nairobi" required />
+        </label>
+        <label>
+          Date
+          <input type="date" id="admin-date" required />
+        </label>
+        <label>
+          Departure Time
+          <input type="time" id="admin-time" required />
+        </label>
+        <label>
+          Base Price (KES)
+          <input type="number" id="admin-price" min="1" required />
+        </label>
+        <button type="submit">Add Trip</button>
+      </form>
+
+      <p class="message" id="admin-message" aria-live="polite"></p>
+      <div id="admin-trip-list" class="admin-trip-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Kinatawa Shuttle · Capacity: 16 seats · Demo front-end with localStorage</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

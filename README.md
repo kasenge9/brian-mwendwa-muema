@@ -1,59 +1,57 @@
-# Introduction to GitHub
+# Kinatawa 16-Seater Minibus Booking Website
 
-<!-- ![](https://github.com/kasenge9/brian-mwendwa-muema/actions/workflows/0-start-exercise.yml/badge.svg) -->
-![](https://github.com/kasenge9/brian-mwendwa-muema/actions/workflows/1-create-a-branch.yml/badge.svg)
-![](https://github.com/kasenge9/brian-mwendwa-muema/actions/workflows/2-commit-a-file.yml/badge.svg)
-![](https://github.com/kasenge9/brian-mwendwa-muema/actions/workflows/3-open-a-pull-request.yml/badge.svg)
-![](https://github.com/kasenge9/brian-mwendwa-muema/actions/workflows/4-merge-your-pull-request.yml/badge.svg)
+A Tahmeed-inspired demo booking website for a **16-seater Kinatawa minibus** built with vanilla HTML, CSS, and JavaScript.
 
-_Get started using GitHub in less than an hour._
+## Advanced features included
 
-## Welcome
+- Trip search by route, date, and passenger count (1–4 passengers).
+- Interactive **16-seat aisle layout** with four real-time states:
+  - Available
+  - Selected
+  - Booked
+  - Temporarily held (5 minutes)
+- Multi-seat booking in one checkout transaction.
+- Dynamic fare engine:
+  - Weekend surcharge (+15%)
+  - Peak-hour surcharge (+10%)
+- Checkout flow with simulated M-Pesa STK push confirmation.
+- Ticket generation with:
+  - Booking ID
+  - Seat list
+  - Driver contact
+  - Print and text-download options
+- Live trip tracker (demo progress bar status).
+- Driver WhatsApp quick-contact button from trip cards.
+- Admin dashboard with KPIs:
+  - Total trips
+  - Bookings
+  - Seats sold
+  - Revenue
+- Admin trip management:
+  - Add trip
+  - Cancel/reopen trip
+  - Occupancy visibility
 
-People use GitHub to build some of the most advanced technologies in the world. Whether you’re visualizing data or building a new game, there’s a whole community and set of tools on GitHub that can help you do it even better. GitHub Skills’ “Introduction to GitHub” exercise guides you through everything you need to start contributing in less than an hour.
+> Note: This is a front-end MVP+ demo. Payments, WhatsApp, and tracking are simulated/browser-based.
 
-- **Who is this for**: New developers, new GitHub users, and students.
-- **What you'll learn**: We'll introduce repositories, branches, commits, and pull requests.
-- **What you'll build**: We'll make a short Markdown file you can use as your [profile README](https://docs.github.com/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme).
-- **Prerequisites**: None. This exercise is a great introduction for your first day on GitHub.
-- **How long**: This exercise takes less than one hour to complete.
+## Project files
 
-In this exercise, you will:
+- `index.html` — App structure (search, seat map, checkout, ticket, tracker, admin).
+- `styles.css` — Responsive UI, seat map visuals, progress tracker, admin KPIs.
+- `script.js` — Business logic for searching, seat holds, pricing, checkout, ticketing, tracking, and admin actions.
 
-1. Create a branch
-2. Commit a file
-3. Open a pull request
-4. Merge your pull request
+## Run locally
 
-### How to start this exercise
+1. Clone the repository.
+2. Open `index.html` in a modern browser.
 
-1. Right-click **Copy Exercise** and open the link in a new tab.
+No build step is required.
 
-   <a id="copy-exercise">
-      <img src="https://img.shields.io/badge/📠_Copy_Exercise-AAA" height="25pt"/>
-   </a>
+## Recommended next production steps
 
-2. In the new tab, most of the prompts will automatically fill in for you.
-   - For owner, choose your personal account or an organization to host the repository.
-   - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.chttps://github.com/kasenge9/brian-mwendwa-muema/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
-   - Scroll down and click the **Create repository** button at the bottom of the form.
-
-3. After your new repository is created, wait about 20 seconds for the exercise to be prepared and buttons updated. You will continue working from your copy of the exercise.
-   - The **Copy Exercise** button will deactivate, changing to gray.
-   - The **Start Exercise** button will activate, changing to green.
-   - You will likely need to refresh the page.
-
-4. Click **Start Exercise**. Follow the step-by-step instructions and feedback will be provided as you progress.
-
-   <a id="start-exercise" href="https://github.com/kasenge9/brian-mwendwa-muema/issues/1">
-      <img src="https://img.shields.io/badge/🚀_Start_Exercise-008000" height="25pt"/>
-   </a>
-
-> [!IMPORTANT]
-> The **Start Exercise** button will activate after copying the repository. You will probably need to refresh the page.
-
----
-
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/introduction-to-github) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
-
-&copy; 2024 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+- Move data from localStorage to backend APIs.
+- Add proper authentication and admin authorization.
+- Use PostgreSQL/MySQL for trips/seats/bookings/payments.
+- Integrate real M-Pesa Daraja callbacks.
+- Implement server-side transactional seat locking.
+- Add PDF ticketing and SMS/WhatsApp notification services.
