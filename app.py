@@ -9,6 +9,7 @@ from flask import Flask, flash, g, redirect, render_template, request, url_for
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = BASE_DIR / "kinatwa.db"
+SEAT_CAPACITY = 16
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-change-this"
@@ -18,6 +19,7 @@ def get_db() -> sqlite3.Connection:
     if "db" not in g:
         g.db = sqlite3.connect(DATABASE)
         g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
 
 
@@ -154,9 +156,17 @@ def occupied_seats_map(trip_id: int) -> set[int]:
     return {r["seat_number"] for r in rows}
 
 
-@app.before_request
-def bootstrap() -> None:
-    init_db()
+def parse_positive_int(value: str, *, lower: int, upper: int | None = None) -> int | None:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+
+    if parsed < lower:
+        return None
+    if upper is not None and parsed > upper:
+        return None
+    return parsed
 
 
 @app.route("/")
@@ -182,7 +192,7 @@ def dashboard() -> str:
 
     available = db.execute(
         """
-        SELECT COALESCE(SUM(16 - booked),0) free_seats
+        SELECT COALESCE(SUM(? - booked),0) free_seats
         FROM (
             SELECT t.id, COUNT(b.id) AS booked
             FROM trips t
@@ -190,7 +200,8 @@ def dashboard() -> str:
             WHERE t.status='open'
             GROUP BY t.id
         )
-        """
+        """,
+        (SEAT_CAPACITY,),
     ).fetchone()["free_seats"]
 
     return render_template(
@@ -224,7 +235,11 @@ def trips() -> str:
         return redirect(url_for("trips"))
 
     if request.args.get("toggle"):
-        trip_id = int(request.args["toggle"])
+        trip_id = parse_positive_int(request.args["toggle"], lower=1)
+        if trip_id is None:
+            flash("Invalid trip id.", "error")
+            return redirect(url_for("trips"))
+
         db.execute(
             """
             UPDATE trips
@@ -247,8 +262,18 @@ def trips() -> str:
 def bookings() -> str:
     db = get_db()
     if request.method == "POST":
-        trip_id = int(request.form["trip_id"])
-        seat_number = int(request.form["seat_number"])
+        trip_id = parse_positive_int(request.form.get("trip_id", ""), lower=1)
+        seat_number = parse_positive_int(
+            request.form.get("seat_number", ""), lower=1, upper=SEAT_CAPACITY
+        )
+        if trip_id is None or seat_number is None:
+            flash("Invalid trip or seat selected.", "error")
+            return redirect(url_for("bookings"))
+
+        trip = db.execute("SELECT id, price FROM trips WHERE id=? AND status='open'", (trip_id,)).fetchone()
+        if trip is None:
+            flash("Selected trip is unavailable.", "error")
+            return redirect(url_for("bookings"))
 
         customer = db.execute(
             "SELECT id FROM customers WHERE phone = ?", (request.form["phone"],)
@@ -262,23 +287,33 @@ def bookings() -> str:
         else:
             customer_id = customer["id"]
 
+        payment_status = request.form["payment_status"]
+        if payment_status not in {"pending", "paid"}:
+            flash("Invalid payment status selected.", "error")
+            return redirect(url_for("bookings", trip_id=trip_id))
+
         try:
             cur = db.execute(
                 """
                 INSERT INTO bookings (customer_id, trip_id, seat_number, payment_status, booked_at)
                 VALUES (?, ?, ?, ?, ?)
                 """,
-                (customer_id, trip_id, seat_number, request.form["payment_status"], datetime.utcnow().isoformat()),
+                (
+                    customer_id,
+                    trip_id,
+                    seat_number,
+                    payment_status,
+                    datetime.utcnow().isoformat(),
+                ),
             )
-            fare = db.execute("SELECT price FROM trips WHERE id=?", (trip_id,)).fetchone()["price"]
             db.execute(
                 "INSERT INTO payments (booking_id, amount, method, status, paid_at) VALUES (?, ?, ?, ?, ?)",
                 (
                     cur.lastrowid,
-                    fare,
+                    trip["price"],
                     "M-Pesa",
-                    "paid" if request.form["payment_status"] == "paid" else "pending",
-                    datetime.utcnow().isoformat() if request.form["payment_status"] == "paid" else None,
+                    "paid" if payment_status == "paid" else "pending",
+                    datetime.utcnow().isoformat() if payment_status == "paid" else None,
                 ),
             )
             db.commit()
@@ -288,7 +323,7 @@ def bookings() -> str:
             flash("Seat already booked for this trip.", "error")
         return redirect(url_for("bookings", trip_id=trip_id))
 
-    selected_trip_id = int(request.args.get("trip_id", "1"))
+    selected_trip_id = parse_positive_int(request.args.get("trip_id", "1"), lower=1) or 1
     trip_rows = db.execute("SELECT * FROM trips WHERE status='open' ORDER BY travel_date").fetchall()
     if not trip_rows:
         return render_template(
@@ -301,7 +336,8 @@ def bookings() -> str:
             counts=fetch_sidebar_counts(),
         )
 
-    if selected_trip_id not in [r["id"] for r in trip_rows]:
+    valid_trip_ids = {r["id"] for r in trip_rows}
+    if selected_trip_id not in valid_trip_ids:
         selected_trip_id = trip_rows[0]["id"]
 
     booking_rows = db.execute(
@@ -426,12 +462,13 @@ def reports() -> str:
         """
         SELECT t.id, t.route_from, t.route_to, t.travel_date,
                COUNT(b.id) AS seats_booked,
-               ROUND((COUNT(b.id) / 16.0) * 100, 1) AS occupancy_pct
+               ROUND((COUNT(b.id) / ?) * 100, 1) AS occupancy_pct
         FROM trips t
         LEFT JOIN bookings b ON b.trip_id = t.id
         GROUP BY t.id
         ORDER BY t.travel_date DESC
-        """
+        """,
+        (float(SEAT_CAPACITY),),
     ).fetchall()
     return render_template(
         "reports.html",
@@ -466,6 +503,10 @@ def settings() -> str:
 
     row = db.execute("SELECT * FROM settings WHERE id=1").fetchone()
     return render_template("settings.html", active="settings", settings=row, counts=fetch_sidebar_counts())
+
+
+with app.app_context():
+    init_db()
 
 
 if __name__ == "__main__":
