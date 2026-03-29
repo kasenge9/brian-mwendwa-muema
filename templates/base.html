@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kinatwa SACCO Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>Kinatwa SACCO</h1>
+        <nav>
+          <a class="{{ 'active' if active=='dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+          <a class="{{ 'active' if active=='trips' else '' }}" href="{{ url_for('trips') }}">Trips / Routes</a>
+          <a class="{{ 'active' if active=='vehicles' else '' }}" href="{{ url_for('vehicles') }}">Vehicles</a>
+          <a class="{{ 'active' if active=='drivers' else '' }}" href="{{ url_for('drivers') }}">Drivers</a>
+          <a class="{{ 'active' if active=='schedules' else '' }}" href="{{ url_for('schedules') }}">Schedules</a>
+          <a class="{{ 'active' if active=='bookings' else '' }}" href="{{ url_for('bookings') }}">Bookings</a>
+          <a class="{{ 'active' if active=='parcels' else '' }}" href="{{ url_for('parcels') }}">Parcels</a>
+          <a class="{{ 'active' if active=='customers' else '' }}" href="{{ url_for('customers') }}">Customers</a>
+          <a class="{{ 'active' if active=='payments' else '' }}" href="{{ url_for('payments') }}">Payments</a>
+          <a class="{{ 'active' if active=='reports' else '' }}" href="{{ url_for('reports') }}">Reports</a>
+          <a class="{{ 'active' if active=='settings' else '' }}" href="{{ url_for('settings') }}">Settings</a>
+        </nav>
+        <div class="counts">
+          <p>Trips: {{ counts.trips }}</p>
+          <p>Bookings: {{ counts.bookings }}</p>
+          <p>Drivers: {{ counts.drivers }}</p>
+          <p>Vehicles: {{ counts.vehicles }}</p>
+        </div>
+      </aside>
+      <main class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

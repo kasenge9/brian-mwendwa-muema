@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Payments</h2>
+<table class="panel table"><thead><tr><th>ID</th><th>Customer</th><th>Route</th><th>Seat</th><th>Amount</th><th>Method</th><th>Status</th><th>Paid At</th></tr></thead><tbody>{% for p in payments %}<tr><td>{{ p.id }}</td><td>{{ p.full_name }}</td><td>{{ p.route_from }}→{{ p.route_to }}</td><td>{{ p.seat_number }}</td><td>{{ p.amount }}</td><td>{{ p.method }}</td><td>{{ p.status }}</td><td>{{ p.paid_at or '-' }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}

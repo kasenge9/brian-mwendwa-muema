@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Reports</h2>
+<div class="cards two">
+  <article class="card">
+    <h3>Daily Bookings (last 14 entries)</h3>
+    <ul>{% for r in daily %}<li>{{ r.day }}: {{ r.bookings }}</li>{% endfor %}</ul>
+  </article>
+  <article class="card">
+    <h3>Trip Seat Occupancy</h3>
+    <ul>{% for o in occupancy %}<li>#{{ o.id }} {{ o.route_from }}→{{ o.route_to }} ({{ o.travel_date }}): {{ o.seats_booked }}/16 ({{ o.occupancy_pct }}%)</li>{% endfor %}</ul>
+  </article>
+</div>
+{% endblock %}

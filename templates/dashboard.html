@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Dashboard</h2>
+<div class="cards four">
+  <article class="card"><h3>Bookings Today</h3><p>{{ totals.bookings_today }}</p></article>
+  <article class="card"><h3>Available Seats</h3><p>{{ available_seats }}</p></article>
+  <article class="card"><h3>Total Trips</h3><p>{{ totals.total_trips }}</p></article>
+  <article class="card"><h3>Revenue (KES)</h3><p>{{ '%.2f'|format(totals.revenue) }}</p></article>
+</div>
+<div class="quick-links">
+  <a href="{{ url_for('trips') }}">Add Trip</a>
+  <a href="{{ url_for('vehicles') }}">Add Vehicle</a>
+  <a href="{{ url_for('bookings') }}">Book Seats</a>
+</div>
+{% endblock %}

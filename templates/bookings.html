@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Bookings</h2>
+{% if not trips %}
+<p class="panel">No open trips available. Create a trip first.</p>
+{% else %}
+<form method="get" class="panel">
+  <label>Select Trip</label>
+  <select name="trip_id" onchange="this.form.submit()">
+    {% for trip in trips %}
+    <option value="{{ trip.id }}" {% if trip.id==selected_trip_id %}selected{% endif %}>#{{ trip.id }} {{ trip.route_from }}→{{ trip.route_to }} ({{ trip.travel_date }} {{ trip.departure_time }})</option>
+    {% endfor %}
+  </select>
+</form>
+
+<div class="panel seat-map">
+  <h3>16-Seat Layout</h3>
+  <div class="seats">
+    {% for seat in range(1,17) %}
+      <label class="seat {{ 'booked' if seat in occupied_seats else 'available' }}">
+        <input type="radio" name="seat_number" value="{{ seat }}" form="book-form" {% if seat in occupied_seats %}disabled{% endif %} required>
+        {{ seat }}
+      </label>
+      {% if seat in [2,6,10,14] %}<span class="aisle"></span>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<form id="book-form" method="post" class="panel form-grid">
+  <input type="hidden" name="trip_id" value="{{ selected_trip_id }}">
+  <input name="full_name" placeholder="Customer full name" required>
+  <input name="phone" placeholder="Phone" required>
+  <input type="email" name="email" placeholder="Email (optional)">
+  <select name="payment_status" required>
+    <option value="pending">Payment Pending</option>
+    <option value="paid">Paid</option>
+  </select>
+  <button type="submit">Save Booking</button>
+</form>
+{% endif %}
+
+<table class="panel table">
+  <thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Route</th><th>Seat</th><th>Payment</th><th>Booked At</th></tr></thead>
+  <tbody>
+    {% for row in bookings %}
+    <tr>
+      <td>{{ row.id }}</td><td>{{ row.full_name }}</td><td>{{ row.phone }}</td>
+      <td>{{ row.route_from }}→{{ row.route_to }} ({{ row.travel_date }} {{ row.departure_time }})</td>
+      <td>{{ row.seat_number }}</td><td>{{ row.payment_status }}</td><td>{{ row.booked_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Schedules</h2>
+<p class="panel">Schedule assignment scaffold is ready. Populate schedule records via SQLite or extend this module with create/edit forms.</p>
+<table class="panel table"><thead><tr><th>ID</th><th>Route</th><th>Date</th><th>Time</th><th>Vehicle</th><th>Driver</th></tr></thead><tbody>{% for s in schedules %}<tr><td>{{ s.id }}</td><td>{{ s.route_from }}→{{ s.route_to }}</td><td>{{ s.travel_date }}</td><td>{{ s.departure_time }}</td><td>{{ s.plate_number or '-' }}</td><td>{{ s.full_name or '-' }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}
